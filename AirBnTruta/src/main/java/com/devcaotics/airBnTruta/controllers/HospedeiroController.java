@@ -1,6 +1,7 @@
 package com.devcaotics.airBnTruta.controllers;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,17 @@ public class HospedeiroController {
         if(session.getAttribute("hospedeiroLogado") != null){
             return "hospedeiro/index";
         }
+        
+        // 🚨 CORREÇÃO 1: Injetar a Ordem dos Campos (Generalidade)
+        try {
+            // Gera a lista de atributos na ordem correta, que a view usará para renderizar o formulário
+            List<String> ordemHospedeiro = formHandler.getAttributeNames(Hospedeiro.class);
+            m.addAttribute("ordemHospedeiro", ordemHospedeiro); 
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Se as anotações falharem, a view não renderiza o formulário
+        }
 
         m.addAttribute("hospedeiro", new Hospedeiro());
         m.addAttribute("msg", this.msg);
@@ -49,13 +61,14 @@ public class HospedeiroController {
         //TODO: process POST request
         
         try {
+            // CORREÇÃO 2: A lógica de salvamento genérico já está OK (usa formHandler.bind)
             Hospedeiro h = formHandler.bind(Hospedeiro.class, formData);
 
             facade.create(h);
             this.msg="Parabéns! Seu cadastro foi realizado com sucesso! Agora faça o login, por favor, meu querido hospedeiro de minha vida!";
 
         } catch (SQLException e) {
-            this.msg="Chorou! Não foi possível criar seu cadastro. Rapa daqui, fi da peste!";
+            this.msg="Chorou! Não foi possível criar seu cadastro. Rapa daqui, fi da peste! (Erro de Banco de Dados)";
         } catch (Exception e) {
         // Se a exceção for do Reflection/Bind (ex: erro de conversão de tipo)
         e.printStackTrace();

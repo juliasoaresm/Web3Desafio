@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.devcaotics.airBnTruta.model.entities.Hospedagem;
-import com.devcaotics.airBnTruta.model.entities.Servico;
+import com.devcaotics.airBnTruta.model.entities.Fugitivo;
 import com.devcaotics.airBnTruta.model.repositories.Facade;
 
 @Controller
-@RequestMapping("/servico")
-public class ServicoController {
+@RequestMapping("/fugitivo")
+public class FugitivoController {
 
     private String msg;
 
@@ -36,13 +36,13 @@ public class ServicoController {
         String tipo = request.getParameter("tipo");
         String desc = request.getParameter("desc");
 
-        Servico s = new Servico();
+        fugitivo s = new fugitivo();
 
         s.setDescricao(desc);
         s.setNome(nome);
         s.setTipo(tipo);*/
 
-        Servico s = null;
+        Fugitivo s = null;
 
         //try {
           //  if(s.getCodigo() == 0){
@@ -56,7 +56,7 @@ public class ServicoController {
         //    e.printStackTrace();
       //  }
 
-        // return "redirect:/servico";
+        // return "redirect:/fugitivo";
         try {
         // Pega o ID (código) do formulário. Se for um formulário de edição, ele estará lá.
         String codigoString = formData.get("codigo"); 
@@ -66,7 +66,7 @@ public class ServicoController {
             int codigo = Integer.parseInt(codigoString);
             
             // 1. BUSCA o objeto EXISTENTE (sem isso, o update falha ou salva dados incompletos)
-            s = this.facade.readServico(codigo); 
+            s = this.facade.readFugitivo(codigo); 
             
             if (s == null) {
                 throw new Exception("Serviço não encontrado para o código: " + codigo);
@@ -81,7 +81,7 @@ public class ServicoController {
             
         } else {            
             // 1. CRIA e PREENCHE um NOVO objeto usando bind()
-            s = formHandler.bind(Servico.class, formData);
+            s = formHandler.bind(Fugitivo.class, formData);
             
             // 2. SALVA
             Facade.getCurrentInstance().create(s); 
@@ -101,7 +101,7 @@ public class ServicoController {
         e.printStackTrace();
     }
 
-    return "redirect:/servico";
+    return "redirect:/fugitivo";
     }
 
     @GetMapping({"","/"})
@@ -109,10 +109,10 @@ public String getMethodName(Model m) {
     
     try {
         List<String> ordemHospedagem = formHandler.getAttributeNames(Hospedagem.class);
-        m.addAttribute("ordemServico", ordemHospedagem);
-        m.addAttribute("servico", new Hospedagem()); 
-        //List<Servico> servicos = this.facade.readAllServico();
-        //m.addAttribute("servicos", servicos);
+        m.addAttribute("ordemfugitivo", ordemHospedagem);
+        m.addAttribute("fugitivo", new Hospedagem()); 
+        //List<fugitivo> fugitivos = this.facade.readAllfugitivo();
+        //m.addAttribute("fugitivos", fugitivos);
         
         m.addAttribute("msg", this.msg);
         this.msg = null;
@@ -121,29 +121,29 @@ public String getMethodName(Model m) {
         m.addAttribute("msg", "Não foi possível recuparar a lista de serviços!");
     }
 
-    return "servico/list";
+    return "fugitivo/list";
 }
     @GetMapping({"/save","/save/"})
     public String createPage(Model m){
-        m.addAttribute("servico", new com.devcaotics.airBnTruta.model.entities.Servico());
-    //List<String> ordemServico = List.of("nome", "tipo", "codigo", "descricao"); 
-    //m.addAttribute("ordemServico", ordemServico); // Adiciona a lista ao Model
+        m.addAttribute("fugitivo", new com.devcaotics.airBnTruta.model.entities.Fugitivo());
+    //List<String> ordemfugitivo = List.of("nome", "tipo", "codigo", "descricao"); 
+    //m.addAttribute("ordemfugitivo", ordemfugitivo); // Adiciona a lista ao Model
 
-    //m.addAttribute("servico", new Servico());
-    return "servico/CadastroServico";
+    //m.addAttribute("fugitivo", new fugitivo());
+    return "fugitivo/Cadastrofugitivo";
 }
     
     @GetMapping("/save/{id}")
     public String getUpdate(Model m,@PathVariable("id") int id) {
 
-        List<Servico> servicos;
+        List<Fugitivo> fugitivos;
         try {
-            List<String> ordemServico = formHandler.getAttributeNames(Servico.class);
-            m.addAttribute("ordemServico", ordemServico);
-            servicos = this.facade.readAllServico();
-            m.addAttribute("servico", this.facade.readServico(id));
+            List<String> ordemfugitivo = formHandler.getAttributeNames(Fugitivo.class);
+            m.addAttribute("ordemfugitivo", ordemfugitivo);
+            fugitivos = this.facade.readAllFugitivo();
+            m.addAttribute("fugitivo", this.facade.readFugitivo(id));
             
-            m.addAttribute("servicos", servicos);
+            m.addAttribute("fugitivos", fugitivos);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -151,21 +151,21 @@ public String getMethodName(Model m) {
         }
         
 
-        return "servico/list";
+        return "fugitivo/list";
     }
 
     @GetMapping("/delete/")
     public String getDelete(Model m,@RequestParam int id) {
 
         try {
-            this.facade.deleteServico(id);
+            this.facade.deleteFugitivo(id);
 
-            this.msg = "Serviço deletado com sucesso!";
+            this.msg = "Fugitivo deletado com sucesso!";
         } catch (SQLException e) {
-            this.msg = "Problema ao deletar o serviço!";
+            this.msg = "Problema ao deletar o fugitivo!";
         }
 
-        return "redirect:/servico";
+        return "redirect:/fugitivo";
     }
     
     

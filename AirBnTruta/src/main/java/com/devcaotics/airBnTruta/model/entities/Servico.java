@@ -1,10 +1,15 @@
 package com.devcaotics.airBnTruta.model.entities;
+import com.devcaotics.airBnTruta.misc.FieldOrder;
 
 public class Servico {
     
+    @FieldOrder(1)
     private int codigo;
+    @FieldOrder(2)
     private String nome;
+    @FieldOrder(3)
     private String tipo;
+    @FieldOrder(4)
     private String descricao;
 
     public int getCodigo() {

@@ -1,5 +1,6 @@
 package com.devcaotics.airBnTruta.misc;
-
+import java.lang.reflect.Field;
+import java.util.Comparator;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -13,28 +14,16 @@ import org.springframework.stereotype.Component;
 public class FormHandler {
 
     public List<String> getAttributeNames(Class<?> clazz){
-        return Arrays.stream(clazz.getDeclaredMethods())
         //estratégia com os campos de um objeto
-        /*Field fields[] = clazz.getDeclaredFields();
+        Field fields[] = clazz.getDeclaredFields();
         
         List<String> names = Arrays.stream(fields)
+            .filter(field -> field.isAnnotationPresent(FieldOrder.class))
+            .sorted(Comparator.comparingInt(field -> field.getAnnotation(FieldOrder.class).value()))
             .map(Field::getName)
-            .collect(Collectors.toList());*/
+            .collect(Collectors.toList());
 
-        //Method[] methods = clazz.getDeclaredMethods();
-
-       /// List<String> names = Arrays.stream(methods)
-        //    .filter(m -> m.getName().startsWith("set"))
-        //    .map(Method::getName)
-        //    .map(m -> m.substring(3))
-        //    .collect(Collectors.toList());
-
-        //return names;
-        .filter(m -> m.getName().startsWith("set") && m.getParameterCount() == 1)
-        .map(Method::getName)
-        .map(m -> m.substring(3))
-        .map(this::toLowerCaseFirstLetter)
-        .collect(Collectors.toList());
+        return names;
     }
 
     private String toLowerCaseFirstLetter(String methodName) {

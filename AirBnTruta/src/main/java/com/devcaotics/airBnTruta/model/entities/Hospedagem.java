@@ -1,5 +1,6 @@
 
 package com.devcaotics.airBnTruta.model.entities;
+import com.devcaotics.airBnTruta.misc.FieldOrder;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,12 +14,19 @@ import java.util.List;
  */
 public class Hospedagem {
     
+    @FieldOrder(1)
     private int codigo;
+    @FieldOrder(2)
     private String descricaoCurta;
+    @FieldOrder(3)
     private String descricaoLonga;
+    @FieldOrder(4)
     private String localizacao;
+    @FieldOrder(5)
     private double diaria;
+    @FieldOrder(6)
     private Date inicio;
+    @FieldOrder(7)
     private Date fim;
     
     private Hospedeiro hospedeiro;

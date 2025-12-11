@@ -14,7 +14,7 @@ public final class ServicoRepository implements Repository<Servico, Integer>{
     @Override
     public void create(Servico c) throws SQLException {
 
-        String sql = "Insert into Servico(nome,tipo,descricao) "+
+        String sql = "Insert into servico(nome,tipo,descricao) "+
         "values(?,?,?)"; 
         
         PreparedStatement pstm = ConnectionManager.getCurrentConnection()
@@ -22,7 +22,7 @@ public final class ServicoRepository implements Repository<Servico, Integer>{
 
         pstm.setString(1, c.getNome());
         pstm.setString(2, c.getTipo());
-        pstm.setBytes(3, c.getDescricao().getBytes());
+        pstm.setString(3, c.getDescricao());
 
         pstm.execute();
     
@@ -37,7 +37,7 @@ public final class ServicoRepository implements Repository<Servico, Integer>{
 
         pstm.setString(1, c.getNome());
         pstm.setString(2, c.getTipo());
-        pstm.setBytes(3, c.getDescricao().getBytes());
+        pstm.setString(3, c.getDescricao());
         pstm.setInt(4, c.getCodigo());
 
         pstm.execute();
@@ -62,7 +62,12 @@ public final class ServicoRepository implements Repository<Servico, Integer>{
             s.setCodigo(result.getInt("codigo"));
             s.setNome(result.getString("nome"));
             s.setTipo(result.getString("tipo"));
-            s.setDescricao(new String(result.getBytes("descricao")));
+            byte[] descricaoBytes = result.getBytes("descricao");
+        if (descricaoBytes != null) {
+            s.setDescricao(new String(descricaoBytes));
+        } else {
+            s.setDescricao(""); // Define como vazio se for NULL no banco
+        }
 
             return s;
 
@@ -97,10 +102,14 @@ public final class ServicoRepository implements Repository<Servico, Integer>{
             s.setCodigo(result.getInt("codigo"));
             s.setNome(result.getString("nome"));
             s.setTipo(result.getString("tipo"));
-            s.setDescricao(new String(result.getBytes("descricao")));
-
+            byte[] descricaoBytes = result.getBytes("descricao");
+            if (descricaoBytes != null) {
+            s.setDescricao(new String(descricaoBytes));
+            } else {
+            s.setDescricao("");
+            }
             servicos.add(s);
-        }
+            }
 
         return servicos;
 

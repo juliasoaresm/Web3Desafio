@@ -1,13 +1,21 @@
 package com.devcaotics.airBnTruta.model.entities;
+import com.devcaotics.airBnTruta.misc.FieldOrder;
 
 public class Fugitivo{
 
+    @FieldOrder(1)
     private int codigo;
+    @FieldOrder(2)
     private String nome;
+    @FieldOrder(3)
     private String vulgo;
+    @FieldOrder(4)
     private String especialidade;
+    @FieldOrder(5)
     private String faccao;
+    @FieldOrder(6)
     private String descricao;
+    @FieldOrder(7)
     private String senha;
 
     public String getSenha() {

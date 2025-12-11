@@ -1,5 +1,6 @@
 
 package com.devcaotics.airBnTruta.model.entities;
+import com.devcaotics.airBnTruta.misc.FieldOrder;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,9 +12,13 @@ import java.util.Date;
  */
 public class Interesse {
     
+    @FieldOrder(1)
     private int codigo;
+    @FieldOrder(2)
     private long realizado;
+    @FieldOrder(3)
     private String proposta;
+    @FieldOrder(4)
     private int tempoPermanencia;
     
     public Interesse(){

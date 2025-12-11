@@ -1,11 +1,17 @@
 package com.devcaotics.airBnTruta.model.entities;
+import com.devcaotics.airBnTruta.misc.FieldOrder;
 
 public class Hospedeiro{
 
+    @FieldOrder(1)
     private int codigo;
+    @FieldOrder(2)
     private String nome;
+    @FieldOrder(3)
     private String vulgo;
+    @FieldOrder(4)
     private String contato;
+    @FieldOrder(5)
     private String senha;
     
     public int getCodigo() {
