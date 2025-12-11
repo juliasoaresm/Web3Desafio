@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div th:fragment="servico(action)">
+      <form method="post" action="/servico/save" th:object="${servico}">
+        <input
+          type="text"
+          th:field="*{codigo}"
+          class="form-control"
+          placeholder="codigo"
+          th:if="${action == 'update'}"
+          readonly="readonly"
+        />
+
+        <input type="hidden" th:field="*{codigo}">
+
+        <input
+          type="text"
+          th:field="*{nome}"
+          class="form-control"
+          placeholder="nome"
+        /><br />
+        <input
+          type="text"
+          th:field="*{tipo}"
+          class="form-control"
+          placeholder="tipo"
+        /><br />
+        <textarea
+          th:field="*{descricao}"
+          class="form-control"
+          placeholder="descrição"
+          rows="4"
+        ></textarea
+        ><br />
+        <button>save</button>
+      </form>
+    </div>
+
+    <div th:fragment="list-generic(handler, items, entityClass, ordem)">
+    <table class="table table-striped">
+        <tr class="table-dark">
+            <th th:each="fn : ${ordem}" 
+                th:text="${@formHandler.toTitleCase(fn)}">
+            </th>
+            <th>Ações</th>
+        </tr>
+        
+        <tr th:each="item : ${items}" th:object="${item}">
+            <td th:each="fn : ${ordem}"
+                th:text="${@formHandler.getAttributeValue(item, fn)}"
+            ></td>
+            
+            <td> 
+                <a
+                  href="#"
+                  class="btn btn-info"
+                  th:href="@{/servico/save/{id}(id=${item.codigo})}" >edit</a
+                >
+                <a
+                  href="#"
+                  th:href="@{/servico/delete/(id=${item.codigo})}" class="btn btn-dark"
+                  >delete</a
+                >
+            </td>
+        </tr>
+    </table>
+</div>
+
+    <div th:fragment="generic(handler,method,path,bean, ordem)">
+    <form th:method="${method}" th:action="${path}" action="#">
+        <div th:each="fn : ${ordem}">
+            <label th:for="'txt'+${fn}" th:text="${@formHandler.toTitleCase(fn)}"></label>         
+            <input th:if="${fn == 'codigo'}"
+                th:id="'txt'+${fn}"
+                type="text"
+                th:name="${fn}"
+                th:value="${handler.getAttributeValue(bean,fn)}"
+                class="form-control"
+                readonly="readonly"
+            />
+
+            <input th:unless="${fn == 'codigo'}" th:if="${fn == 'senha'}" 
+                th:id="'txt'+${fn}"
+                type="password"
+                th:name="${fn}"
+                th:value="${handler.getAttributeValue(bean,fn)}"
+                class="form-control"
+            />
+            
+            <textarea th:unless="${fn == 'codigo' or fn == 'senha'}" th:if="${fn == 'descricao'}"
+                th:id="'txt'+${fn}"
+                th:name="${fn}"
+                th:text="${handler.getAttributeValue(bean,fn)}"
+                class="form-control"
+                rows="4" 
+            ></textarea>
+            
+            <input 
+                th:unless="${fn == 'codigo' or fn == 'senha' or fn == 'descricao'}"
+                th:id="'txt'+${fn}"
+                type="text"
+                th:name="${fn}"
+                th:value="${handler.getAttributeValue(bean,fn)}"
+                class="form-control"
+            /></div>
+        <button class="btn btn-primary">save</button>
+    </form>
+  </div>
+  </body>
+</html>
